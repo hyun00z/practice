@@ -1,0 +1,33 @@
+<logistic>
+build : config_samples(LogisticConfig, LogisticMNISTConfig)
+build_config
+config_smaples : train_config(LogisticTrainConfig),
+	 build_config(LogisticConfig)
+generator : config_samples(LogisticMNISTConfig)
+model : build_config(BuildConfig)
+run : config_samples(LogisticTrainConfig, LogisticMNISTConfig), 
+	train_config(train_config_parser), 
+	test_config(TestConfig, test_config_parser)
+test_config : train_config(WEIGHTS)
+train : train_config(LogisticTrainConfig, train_config_parser)
+train_config : 
+
+- LogisticTrainConfig -> kmeansTrainConfig
+
+<lasso>
+build : build_config(LassoBuildConfig), 
+	config_samples(LassoBostonHousePricesBuildConfig)
+build_config : model_config(ModelConfig)
+config_samples : build_config(LassoBuildConfig), 
+	train_config(LassoTrainConfig), 
+	generator_config(LassoGeneratorConfig)
+generator : generator_config(LassoGeneratorConfig), 
+	config_samples(LassoBostonHousePricesConfig)
+generator_config : generator.generator_config(GeneratorConfig)
+run : build(LassoBuildConfig, LassoBuildConfigList, LassoBuild), 
+	generator(LassoGeneratorConfig, LassoGeneratorConfigList, LassoGenerato), 
+	train_config(LassoTrainConfig, LassoTrain), 
+	test_config(LassoTestConfig, LassoTest), 
+	config_samples(LassoBostonHousePricesTrainConfig)
+test_config : 
+train_config
